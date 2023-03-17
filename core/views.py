@@ -6,9 +6,13 @@ from .models import *
 
 def home(request):
     products = Product.objects.all()
-    customer = request.user.customer
+    if request.user.is_authenticated:
+        customer = request.user.customer
+    else :
+        customer = ""
     context = {'products': products,
-               'customer': customer}
+                'customer': customer}
+    
     return render(request, 'core/home.html', context)
 
 def shopping_cart(request):
