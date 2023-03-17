@@ -21,6 +21,7 @@ def shopping_cart(request):
         order, created = Order.objects.get_or_create(customer=customer)
         items = order.orderitem_set.all()
     else:
+        customer = ""
         items = []
         order = {'get_cart_total': 0}
 
