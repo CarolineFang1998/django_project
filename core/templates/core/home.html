@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yuhan Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"/>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+
+<!--    css-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script type="text/javascript">
+        var user = '{{request.user}}'
+
+        function getToken(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getToken('csrftoken')
+
+        function getCookie(name) {
+            // Split cookie string and get all individual name=value pairs in an array
+            var cookieArr = document.cookie.split(";");
+
+            // Loop through the array elements
+            for(var i = 0; i < cookieArr.length; i++) {
+                var cookiePair = cookieArr[i].split("=");
+
+                /* Removing whitespace at the beginning of the cookie name
+                and compare it with the given string */
+                if(name == cookiePair[0].trim()) {
+                    // Decode the cookie value and return
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+            // Return null if not found
+            return null;
+        }
+    </script>
+
+</head>
+<body>
+
+
+<div class="container ">
+    {% block content %}
+
+    <div style="position: relative; width: 100%;">
+        <div style="position: absolute; top: 0; right: 0; width: 100px; text-align:right;">
+            {{customer}}
+        </div>
+    </div>
+
+    <h1>Yuhan Portfolio</h1>
+    <ul class="nav nav-tabs mt-2 mb-2">
+        <li class="nav-item">
+            <a class="nav-link active" href="http://localhost:8000">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="http://localhost:8000/shopping_cart">Shopping Cart</a>
+        </li>
+    </ul>
+
+    <h2 class="mt-2 mb-2">Products</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-lg-4 border border-dark mt-2 mb-2 ">
+            <img class="thumbnail mt-2 mb-2" src="{{product.imageURL}}" width="100%" height="160px">
+            <div class="box-element product">
+                <h6><strong>{{product.name}}</strong></h6>
+                <div> {{product.description}}</div>
+
+                <button data-product="{{product.id}}" data-action="add"
+                        class="btn add-btn update_cart btn-outline-secondary mt-2 mb-2">Add to Cart</button>
+
+                <h4 style="display: inline-block; float: right">
+                    <strong>${{product.price|floatformat:2}}</strong>
+                </h4>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endblock content %}
+</div>
+
+<!--    javascript-->
+<script type="text/javascript" src="{% static 'js/cart.js' %}">
+</script>
+
+</body>
+</html>
